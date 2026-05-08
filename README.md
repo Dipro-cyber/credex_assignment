@@ -1,36 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Spend Audit — by Credex
 
-## Getting Started
+A free web app that helps startup founders and engineering managers discover where they're overspending on AI tools (Cursor, GitHub Copilot, Claude, ChatGPT, and more), get an instant savings breakdown, and find out if Credex infrastructure credits can cut their bill further.
 
-First, run the development server:
+**Who it's for:** Engineering managers and technical founders at seed-to-Series-B startups who are paying for multiple AI tools and suspect they're not getting the best value.
+
+---
+
+## Screenshots
+
+> _Add 3+ screenshots or a Loom link here after deployment._
+
+---
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js ≥ 20.9
+- npm ≥ 10
+
+### Install & run locally
 
 ```bash
+git clone https://github.com/Dipro-cyber/credex_assignment.git
+cd credex_assignment
+npm install
+cp .env.example .env.local
+# Fill in .env.local with your keys (see .env.example for descriptions)
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Run tests
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm test -- --run
+```
 
-## Learn More
+### Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npx vercel --prod
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Set all environment variables from `.env.example` in your Vercel project settings before deploying.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Decisions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+> _Fill in 5 trade-offs made and why after completing the project._
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Decision:** ...  
+   **Why:** ...
+
+2. **Decision:** ...  
+   **Why:** ...
+
+3. **Decision:** ...  
+   **Why:** ...
+
+4. **Decision:** ...  
+   **Why:** ...
+
+5. **Decision:** ...  
+   **Why:** ...
+
+---
+
+## Deployed URL
+
+> _Add link here after deploying._

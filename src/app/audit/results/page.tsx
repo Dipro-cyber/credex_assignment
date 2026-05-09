@@ -1,25 +1,37 @@
 /**
- * /audit/results — Audit results page.
+ * /audit/results — Full audit results page.
  *
- * Reads form state from the `data` search param (encoded JSON),
- * runs the audit engine, and renders the results.
- *
- * Full results UI is built in Commit 5. This commit wires up the engine
- * and shows a raw JSON preview to confirm the engine is working.
+ * Server Component: reads searchParams, runs audit engine, renders results.
+ * Client Components are used only for interactive elements (share, email form).
  */
+import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
 import { runAudit } from "@/lib/audit/engine";
+import { HeroSavings } from "@/components/results/hero-savings";
+import { ToolResultCard } from "@/components/results/tool-result-card";
+import { CredexCta } from "@/components/results/credex-cta";
+import { NotifyMeForm } from "@/components/results/notify-me-form";
+import { EmailCaptureForm } from "@/components/results/email-capture-form";
+import { ShareButton } from "@/components/results/share-button";
+import { Separator } from "@/components/ui/separator";
+import {
+  HIGH_SAVINGS_THRESHOLD_MONTHLY,
+  LOW_SAVINGS_THRESHOLD_MONTHLY,
+} from "@/lib/constants";
 import type { AuditFormState } from "@/types/audit";
 
-// This page is dynamically rendered because it reads searchParams
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Your AI Spend Audit Results",
+  description: "See where you're overspending on AI tools and how much you could save.",
+};
 
 export default async function ResultsPage(props: PageProps<"/audit/results">) {
   const searchParams = await props.searchParams;
   const raw = searchParams?.data;
 
-  // Parse and validate the form state from the URL
   let formState: AuditFormState | null = null;
   let parseError: string | null = null;
 
@@ -48,70 +60,151 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
     );
   }
 
-  // Run the audit engine (pure function — no I/O)
-  const auditResult = runAudit(formState);
+  const audit = runAudit(formState);
+
+  const isHighSavings = audit.totalMonthlySavings >= HIGH_SAVINGS_THRESHOLD_MONTHLY;
+  const isLowSavings = audit.totalMonthlySavings < LOW_SAVINGS_THRESHOLD_MONTHLY;
+
+  // Sort: highest savings first, then optimal
+  const sortedResults = [...audit.toolResults].sort(
+    (a, b) => b.monthlySavings - a.monthlySavings
+  );
 
   return (
     <div className="min-h-screen bg-background">
+      {/* ------------------------------------------------------------------ */}
+      {/* Header                                                               */}
+      {/* ------------------------------------------------------------------ */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-3xl items-center gap-4 px-4 sm:px-6">
-          <Link
-            href="/audit"
-            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Back
-          </Link>
-          <span className="text-sm font-semibold">Your Audit Results</span>
+        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/audit"
+              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Back to form"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back
+            </Link>
+            <span className="text-sm font-semibold">Audit Results</span>
+          </div>
+          <ShareButton auditId={audit.id} />
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-10">
-        {/* Hero savings — full UI in Commit 5 */}
-        <div className="mb-8 rounded-xl border border-border bg-card p-6 text-center">
-          <p className="text-sm text-muted-foreground mb-1">Total monthly savings</p>
-          <p className="text-5xl font-bold text-foreground">
-            ${auditResult.totalMonthlySavings.toLocaleString()}
-          </p>
-          <p className="text-sm text-muted-foreground mt-1">
-            ${auditResult.totalAnnualSavings.toLocaleString()} / year
-          </p>
-        </div>
+      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-10 space-y-8">
+        {/* ---------------------------------------------------------------- */}
+        {/* Hero savings number                                               */}
+        {/* ---------------------------------------------------------------- */}
+        <section aria-labelledby="savings-heading">
+          <h1 id="savings-heading" className="sr-only">
+            Your AI spend audit results
+          </h1>
+          <HeroSavings
+            totalMonthlySavings={audit.totalMonthlySavings}
+            totalAnnualSavings={audit.totalAnnualSavings}
+          />
+        </section>
 
-        {/* Per-tool results — full UI in Commit 5 */}
-        <div className="space-y-3">
-          {auditResult.toolResults.map((r) => (
-            <div
-              key={r.toolId}
-              className="rounded-xl border border-border bg-card p-4"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="font-medium text-sm text-foreground capitalize">
-                    {r.toolId.replace(/_/g, " ")}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {r.reason}
-                  </p>
-                </div>
-                <div className="text-right shrink-0">
-                  <p className="text-sm font-semibold text-foreground">
-                    {r.monthlySavings > 0
-                      ? `−$${r.monthlySavings}/mo`
-                      : "✓ Optimal"}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {r.recommendedAction}
-                  </p>
-                </div>
+        {/* ---------------------------------------------------------------- */}
+        {/* Credex CTA — only for high savings                               */}
+        {/* ---------------------------------------------------------------- */}
+        {isHighSavings && (
+          <section aria-labelledby="credex-cta-heading">
+            <h2 id="credex-cta-heading" className="sr-only">
+              Save more with Credex
+            </h2>
+            <CredexCta totalMonthlySavings={audit.totalMonthlySavings} />
+          </section>
+        )}
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Per-tool breakdown                                                */}
+        {/* ---------------------------------------------------------------- */}
+        <section aria-labelledby="breakdown-heading">
+          <h2
+            id="breakdown-heading"
+            className="text-base font-semibold text-foreground mb-3"
+          >
+            Per-tool breakdown
+          </h2>
+          <div className="space-y-3" role="list" aria-label="Tool audit results">
+            {sortedResults.map((r) => (
+              <div key={r.toolId} role="listitem">
+                <ToolResultCard result={r} />
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </section>
 
-        <p className="mt-8 text-center text-xs text-muted-foreground">
-          Full results UI with Credex CTA and email capture coming in Commit 5.
-        </p>
+        {/* ---------------------------------------------------------------- */}
+        {/* Savings summary row                                               */}
+        {/* ---------------------------------------------------------------- */}
+        {audit.totalMonthlySavings > 0 && (
+          <div className="rounded-xl border border-border bg-muted/40 px-5 py-4 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs text-muted-foreground">Total monthly savings</p>
+              <p className="text-xl font-bold text-foreground">
+                ${audit.totalMonthlySavings.toLocaleString()}/mo
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-muted-foreground">Annual savings</p>
+              <p className="text-xl font-bold text-emerald-600">
+                ${audit.totalAnnualSavings.toLocaleString()}/yr
+              </p>
+            </div>
+          </div>
+        )}
+
+        <Separator />
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Email capture — shown AFTER results, never before                */}
+        {/* ---------------------------------------------------------------- */}
+        <section aria-labelledby="email-capture-heading">
+          <h2
+            id="email-capture-heading"
+            className="text-base font-semibold text-foreground mb-3"
+          >
+            Get your report
+          </h2>
+          <EmailCaptureForm
+            auditId={audit.id}
+            totalMonthlySavings={audit.totalMonthlySavings}
+          />
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Notify me — only for low savings                                 */}
+        {/* ---------------------------------------------------------------- */}
+        {isLowSavings && (
+          <section aria-labelledby="notify-heading">
+            <h2 id="notify-heading" className="sr-only">
+              Get notified about future savings
+            </h2>
+            <NotifyMeForm />
+          </section>
+        )}
+
+        {/* ---------------------------------------------------------------- */}
+        {/* Footer actions                                                    */}
+        {/* ---------------------------------------------------------------- */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+          <Link
+            href="/audit"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
+            Run a new audit
+          </Link>
+          <p className="text-xs text-muted-foreground text-center">
+            Pricing data sourced from official vendor pages.{" "}
+            <Link href="/" className="underline underline-offset-4 hover:text-foreground">
+              About this tool
+            </Link>
+          </p>
+        </div>
       </main>
     </div>
   );

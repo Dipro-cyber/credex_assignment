@@ -3,9 +3,11 @@
  *
  * Server Component: reads searchParams, runs audit engine, renders results.
  * Client Components are used only for interactive elements (share, email form).
+ * The AI summary streams in via Suspense — it never blocks the rest of the page.
  */
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { runAudit } from "@/lib/audit/engine";
 import { HeroSavings } from "@/components/results/hero-savings";
@@ -14,6 +16,7 @@ import { CredexCta } from "@/components/results/credex-cta";
 import { NotifyMeForm } from "@/components/results/notify-me-form";
 import { EmailCaptureForm } from "@/components/results/email-capture-form";
 import { ShareButton } from "@/components/results/share-button";
+import { SummarySection, SummarySkeleton } from "@/components/results/summary-section";
 import { Separator } from "@/components/ui/separator";
 import {
   HIGH_SAVINGS_THRESHOLD_MONTHLY,
@@ -104,6 +107,18 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
             totalMonthlySavings={audit.totalMonthlySavings}
             totalAnnualSavings={audit.totalAnnualSavings}
           />
+        </section>
+
+        {/* ---------------------------------------------------------------- */}
+        {/* AI-generated personalized summary — streams in via Suspense      */}
+        {/* ---------------------------------------------------------------- */}
+        <section aria-labelledby="summary-heading">
+          <h2 id="summary-heading" className="sr-only">
+            Personalized summary
+          </h2>
+          <Suspense fallback={<SummarySkeleton />}>
+            <SummarySection audit={audit} />
+          </Suspense>
         </section>
 
         {/* ---------------------------------------------------------------- */}

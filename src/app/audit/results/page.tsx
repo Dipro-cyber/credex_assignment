@@ -187,6 +187,11 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
           <EmailCaptureForm
             auditId={audit.id}
             totalMonthlySavings={audit.totalMonthlySavings}
+            totalAnnualSavings={audit.totalAnnualSavings}
+            topRecommendations={sortedResults
+              .filter((r) => r.monthlySavings > 0)
+              .slice(0, 3)
+              .map((r) => r.recommendedAction)}
           />
         </section>
 

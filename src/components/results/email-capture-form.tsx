@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 interface EmailCaptureFormProps {
   auditId: string;
   totalMonthlySavings: number;
+  totalAnnualSavings: number;
+  topRecommendations: string[];
 }
 
 /**
@@ -14,7 +16,7 @@ interface EmailCaptureFormProps {
  * Optional fields: company name, role.
  * Submits to /api/leads (Commit 7).
  */
-export function EmailCaptureForm({ auditId, totalMonthlySavings }: EmailCaptureFormProps) {
+export function EmailCaptureForm({ auditId, totalMonthlySavings, totalAnnualSavings, topRecommendations }: EmailCaptureFormProps) {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
@@ -49,6 +51,8 @@ export function EmailCaptureForm({ auditId, totalMonthlySavings }: EmailCaptureF
           companyName: company.trim() || undefined,
           role: role.trim() || undefined,
           totalMonthlySavings,
+          totalAnnualSavings,
+          topRecommendations,
         }),
       });
 

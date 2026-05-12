@@ -28,9 +28,7 @@ jobs:
         run: npm run lint
 
       - name: Run tests
-        # Skip gracefully if no test script exists yet
-        run: npm test -- --run || true
-        env:
-          NEXT_PUBLIC_APP_URL: https://credex-spend-audit.vercel.app
+        run: npm run test:run
+        env:          NEXT_PUBLIC_APP_URL: https://credex-spend-audit.vercel.app
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
           NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder

@@ -80,21 +80,23 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <Link
-              href="/audit"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Back to form"
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back
-            </Link>
-            <span className="text-sm font-semibold">Audit Results</span>
+            <nav aria-label="Breadcrumb">
+              <Link
+                href="/audit"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Back to form"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Back
+              </Link>
+            </nav>
+            <span className="text-sm font-semibold" aria-hidden="true">Audit Results</span>
           </div>
           <ShareButton audit={audit} />
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl px-4 sm:px-6 py-10 space-y-8">
+      <main id="main-content" className="mx-auto max-w-3xl px-4 sm:px-6 py-10 space-y-8">
         {/* ---------------------------------------------------------------- */}
         {/* Hero savings number                                               */}
         {/* ---------------------------------------------------------------- */}

@@ -41,7 +41,7 @@ function Header() {
             Free
           </Badge>
         </div>
-        <nav className="flex items-center gap-4">
+        <nav aria-label="Main navigation" className="flex items-center gap-4">
           <a
             href={CREDEX_URL}
             target="_blank"
@@ -389,17 +389,17 @@ function FaqSection() {
         </h2>
       </div>
 
-      <div className="space-y-6">
+      <dl className="space-y-6">
         {FAQS.map((faq) => (
           <div key={faq.q}>
-            <h3 className="font-semibold text-foreground mb-2">{faq.q}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <dt className="font-semibold text-foreground mb-2">{faq.q}</dt>
+            <dd className="text-sm text-muted-foreground leading-relaxed">
               {faq.a}
-            </p>
+            </dd>
             <Separator className="mt-6" />
           </div>
         ))}
-      </div>
+      </dl>
     </section>
   );
 }

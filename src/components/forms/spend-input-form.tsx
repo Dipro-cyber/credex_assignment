@@ -453,11 +453,11 @@ function ToolPicker({ addedToolIds, onSelect, onCancel }: ToolPickerProps) {
   return (
     <div
       className="rounded-xl border border-border bg-card p-4"
-      role="listbox"
+      role="list"
       aria-label="Select a tool to add"
     >
       <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-medium text-foreground">Select a tool</p>
+        <p className="text-sm font-medium text-foreground" id="tool-picker-label">Select a tool</p>
         <button
           type="button"
           onClick={onCancel}
@@ -469,21 +469,20 @@ function ToolPicker({ addedToolIds, onSelect, onCancel }: ToolPickerProps) {
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {available.map((tool) => (
-          <button
-            key={tool.id}
-            type="button"
-            role="option"
-            aria-selected={false}
-            onClick={() => onSelect(tool.id)}
-            className="flex flex-col items-start gap-0.5 rounded-lg border border-border bg-background px-3 py-2.5 text-left hover:border-foreground hover:bg-muted/50 transition-colors"
-          >
-            <span className="text-sm font-medium text-foreground">
-              {tool.label}
-            </span>
-            <span className="text-xs text-muted-foreground">
-              {tool.description}
-            </span>
-          </button>
+          <div key={tool.id} role="listitem">
+            <button
+              type="button"
+              onClick={() => onSelect(tool.id)}
+              className="w-full flex flex-col items-start gap-0.5 rounded-lg border border-border bg-background px-3 py-2.5 text-left hover:border-foreground hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <span className="text-sm font-medium text-foreground">
+                {tool.label}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                {tool.description}
+              </span>
+            </button>
+          </div>
         ))}
       </div>
     </div>

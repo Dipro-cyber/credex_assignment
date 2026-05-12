@@ -53,10 +53,11 @@ describe("Cursor", () => {
 
   it("suggests Windsurf for coding teams on Pro plan with 3+ seats", () => {
     // 5 seats × $20 = $100/mo on Cursor Pro
-    // Windsurf Pro = 5 × $15 = $75/mo → saves $25
+    // Windsurf Pro = 5 × $20 = $100/mo → same price now, no savings
+    // Rule only fires if savings > $20 — so this should be right_plan
     const result = auditTool(entry("cursor", "pro", 100, 5), codingCtx);
-    expect(result.recommendationType).toBe("switch_tool");
-    expect(result.monthlySavings).toBe(25);
+    // Windsurf Pro is now $20/seat (same as Cursor Pro) — no switch recommended
+    expect(result.recommendationType).toBe("right_plan");
   });
 
   it("does NOT suggest Windsurf for writing use case", () => {
@@ -65,8 +66,8 @@ describe("Cursor", () => {
     expect(result.recommendationType).not.toBe("switch_tool");
   });
 
-  it("returns right_plan for Cursor Pro with 1 seat (savings < $20 threshold)", () => {
-    // 1 seat × $20 = $20 on Cursor Pro, Windsurf = $15 → saves $5 (below $20 threshold)
+  it("returns right_plan for Cursor Pro with 1 seat", () => {
+    // 1 seat × $20 = $20 on Cursor Pro — no cheaper alternative at same price
     const result = auditTool(entry("cursor", "pro", 20, 1), codingCtx);
     expect(result.recommendationType).toBe("right_plan");
     expect(result.monthlySavings).toBe(0);
@@ -232,20 +233,20 @@ describe("OpenAI API", () => {
 
 describe("Windsurf", () => {
   it("downgrades Teams to Pro for fewer than 5 seats", () => {
-    // 3 seats × $35 = $105, Pro = 3 × $15 = $45 → saves $60
-    const result = auditTool(entry("windsurf", "teams", 105, 3), codingCtx);
+    // 3 seats × $40 = $120, Pro = 3 × $20 = $60 → saves $60
+    const result = auditTool(entry("windsurf", "teams", 120, 3), codingCtx);
     expect(result.recommendationType).toBe("downgrade_plan");
     expect(result.monthlySavings).toBe(60);
   });
 
   it("flags Windsurf for non-coding use case", () => {
-    const result = auditTool(entry("windsurf", "pro", 75, 5), writingCtx);
+    const result = auditTool(entry("windsurf", "pro", 100, 5), writingCtx);
     expect(result.recommendationType).toBe("switch_tool");
   });
 
   it("keeps Teams plan for 5+ seats on coding use case", () => {
-    // 5 seats × $35 = $175 — correct price
-    const result = auditTool(entry("windsurf", "teams", 175, 5), codingCtx);
+    // 5 seats × $40 = $200 — correct price at current rates
+    const result = auditTool(entry("windsurf", "teams", 200, 5), codingCtx);
     expect(result.recommendationType).toBe("right_plan");
   });
 });
@@ -293,10 +294,10 @@ describe("runAudit — totals", () => {
       teamSize: 5,
       useCase: "coding",
       tools: [
-        // Cursor Pro 1 seat — optimal (savings < $20 threshold)
+        // Cursor Pro 1 seat — optimal
         entry("cursor", "pro", 20, 1),
         // Windsurf Pro 1 seat — optimal
-        entry("windsurf", "pro", 15, 1),
+        entry("windsurf", "pro", 20, 1),
       ],
     };
 

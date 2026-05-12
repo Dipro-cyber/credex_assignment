@@ -92,21 +92,23 @@ function auditCursor(entry: ToolEntry, ctx: RuleContext): ToolAuditResult {
     );
   }
 
-  // Coding use case: Windsurf Pro is cheaper than Cursor Pro
+  // Coding use case: Windsurf Pro was cheaper than Cursor Pro, but as of March 2026
+  // Windsurf raised Pro to $20/seat — same as Cursor. No switch recommended.
+  // Keeping this block for future pricing changes — currently never fires.
   if (
     planId === "pro" &&
     (ctx.useCase === "coding" || ctx.useCase === "mixed") &&
     seats >= 3
   ) {
-    const windsurfCost = seats * 15;
+    const windsurfCost = seats * 20; // Windsurf Pro = $20/seat (updated March 2026)
     const savings = monthlySpend - windsurfCost;
     if (savings > 20) {
       return result(
         entry,
         "switch_tool",
-        `Switch to Windsurf Pro ($15/seat) — save $${Math.round(savings)}/mo`,
+        `Switch to Windsurf Pro ($20/seat) — save $${Math.round(savings)}/mo`,
         savings,
-        `Windsurf Pro ($15/seat) offers comparable AI coding features at 25% less than Cursor Pro ($20/seat).`
+        `Windsurf Pro ($20/seat) offers comparable AI coding features at the same price as Cursor Pro — consider it if you prefer Windsurf's UX.`
       );
     }
   }
@@ -461,13 +463,13 @@ function auditWindsurf(entry: ToolEntry, ctx: RuleContext): ToolAuditResult {
 
   // Teams plan for small teams: Pro is sufficient under 5 seats
   if (planId === "teams" && seats < 5) {
-    const savings = monthlySpend - seats * 15;
+    const savings = monthlySpend - seats * 20; // Pro = $20/seat
     return result(
       entry,
       "downgrade_plan",
-      `Downgrade to Windsurf Pro ($15/seat) — save $${Math.round(savings)}/mo`,
+      `Downgrade to Windsurf Pro ($20/seat) — save $${Math.round(savings)}/mo`,
       savings,
-      `Teams plan ($35/seat) adds admin controls — not needed for ${seats} people. Pro ($15/seat) has the same AI features.`
+      `Teams plan ($40/seat) adds admin controls — not needed for ${seats} people. Pro ($20/seat) has the same AI features.`
     );
   }
 

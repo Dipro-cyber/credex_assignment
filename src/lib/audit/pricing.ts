@@ -75,11 +75,11 @@ const PRICING_TABLE: Record<string, PricingEntry> = {
   "gemini:api":   { pricePerSeatPerMonth: null,   usageBased: true,  minSeats: 1 },
 
   // -------------------------------------------------------------------------
-  // Windsurf — https://windsurf.com/pricing
+  // Windsurf — https://windsurf.com/pricing (updated March 2026)
   // -------------------------------------------------------------------------
   "windsurf:free":  { pricePerSeatPerMonth: 0,    usageBased: false, minSeats: 1 },
-  "windsurf:pro":   { pricePerSeatPerMonth: 15,   usageBased: false, minSeats: 1 },
-  "windsurf:teams": { pricePerSeatPerMonth: 35,   usageBased: false, minSeats: 1 },
+  "windsurf:pro":   { pricePerSeatPerMonth: 20,   usageBased: false, minSeats: 1 },
+  "windsurf:teams": { pricePerSeatPerMonth: 40,   usageBased: false, minSeats: 1 },
 };
 
 export function getPricing(toolId: ToolId, planId: PlanId): PricingEntry | null {

@@ -114,8 +114,8 @@ export const TOOL_CONFIGS: ToolConfig[] = [
     defaultPlan: "pro",
     plans: [
       { id: "free", label: "Free", hint: "$0" },
-      { id: "pro", label: "Pro", hint: "$15/seat/mo" },
-      { id: "teams", label: "Teams", hint: "$35/seat/mo" },
+      { id: "pro", label: "Pro", hint: "$20/seat/mo" },
+      { id: "teams", label: "Teams", hint: "$40/seat/mo" },
     ],
   },
 ];

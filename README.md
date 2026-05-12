@@ -8,12 +8,16 @@ A free web app that helps startup founders and engineering managers discover whe
 
 ## Screenshots
 
-> Add 3+ screenshots or a Loom link here after deployment.
->
-> Suggested shots:
-> 1. Landing page hero
-> 2. Spend input form with 3–4 tools filled in
-> 3. Results page showing $500+/mo savings with Credex CTA
+### Landing page
+![Landing page](./screenshots/landing.png)
+
+### Spend input form
+![Spend input form](./screenshots/form.png)
+
+### Audit results
+![Audit results](./screenshots/results.png)
+
+> Live demo: **https://credexassignment-six.vercel.app**
 
 ---
 

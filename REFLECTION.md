@@ -1,6 +1,7 @@
 # REFLECTION — AI Spend Audit
 
 Answer all 5 questions below. Each answer should be 150–400 words.
+Fill this in after completing the project.
 
 ---
 

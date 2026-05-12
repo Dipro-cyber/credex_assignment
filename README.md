@@ -86,4 +86,4 @@ Windsurf raised Pro from $15 to $20/month in March 2026 (matching Cursor). This 
 
 ## Deployed URL
 
-> Add Vercel deployment URL here after deploying.
+**https://credexassignment-six.vercel.app**

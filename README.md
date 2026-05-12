@@ -8,14 +8,13 @@ A free web app that helps startup founders and engineering managers discover whe
 
 ## Screenshots
 
-### Landing page
-![Landing page](./screenshots/landing.png)
-
-### Spend input form
-![Spend input form](./screenshots/form.png)
-
-### Audit results
-![Audit results](./screenshots/results.png)
+![Screenshot 1](./screenshots/Screenshot%20(1337).png)
+![Screenshot 2](./screenshots/Screenshot%20(1338).png)
+![Screenshot 3](./screenshots/Screenshot%20(1339).png)
+![Screenshot 4](./screenshots/Screenshot%20(1340).png)
+![Screenshot 5](./screenshots/Screenshot%20(1341).png)
+![Screenshot 6](./screenshots/Screenshot%20(1342).png)
+![Screenshot 7](./screenshots/Screenshot%20(1343).png)
 
 > Live demo: **https://credexassignment-six.vercel.app**
 

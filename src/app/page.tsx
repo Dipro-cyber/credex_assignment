@@ -3,6 +3,7 @@ import { ArrowRight, CheckCircle, TrendingDown, Zap, Shield } from "lucide-react
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { GITHUB_URL } from "@/lib/constants";
 
 // ---------------------------------------------------------------------------
@@ -41,7 +42,7 @@ function Header() {
             Free
           </Badge>
         </div>
-        <nav aria-label="Main navigation" className="flex items-center gap-4">
+        <nav aria-label="Main navigation" className="flex items-center gap-3">
           <a
             href={GITHUB_URL}
             target="_blank"
@@ -50,6 +51,7 @@ function Header() {
           >
             GitHub
           </a>
+          <ThemeToggle />
           <Link
             href="/audit"
             className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"

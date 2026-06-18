@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { SpendInputForm } from "@/components/forms/spend-input-form";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
   title: "Audit Your AI Spend — AI Spend Audit",
@@ -20,18 +21,21 @@ export default function AuditPage() {
     <div className="min-h-screen bg-background">
       {/* Nav */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-14 max-w-3xl items-center gap-4 px-4 sm:px-6">
-          <nav aria-label="Breadcrumb">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="Back to home"
-            >
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-              Back
-            </Link>
-          </nav>
-          <span className="text-sm font-semibold" aria-hidden="true">SpendLens</span>
+        <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
+          <div className="flex items-center gap-4">
+            <nav aria-label="Breadcrumb">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                aria-label="Back to home"
+              >
+                <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+                Back
+              </Link>
+            </nav>
+            <span className="text-sm font-semibold" aria-hidden="true">SpendLens</span>
+          </div>
+          <ThemeToggle />
         </div>
       </header>
 

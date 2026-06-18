@@ -15,7 +15,8 @@ import { ToolResultCard } from "@/components/results/tool-result-card";
 import { CredexCta } from "@/components/results/credex-cta";
 import { NotifyMeForm } from "@/components/results/notify-me-form";
 import { EmailCaptureForm } from "@/components/results/email-capture-form";
-import { ShareButton } from "@/components/results/share-button";import { SummarySection, SummarySkeleton } from "@/components/results/summary-section";
+import { ShareButton } from "@/components/results/share-button";
+import { ThemeToggle } from "@/components/theme-toggle";import { SummarySection, SummarySkeleton } from "@/components/results/summary-section";
 import { Separator } from "@/components/ui/separator";
 import {
   HIGH_SAVINGS_THRESHOLD_MONTHLY,
@@ -91,7 +92,10 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
               </Link>
             </nav>
             <span className="text-sm font-semibold" aria-hidden="true">Audit Results</span>          </div>
-          <ShareButton audit={audit} />
+          <div className="flex items-center gap-2">
+            <ShareButton audit={audit} />
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

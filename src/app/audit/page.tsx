@@ -31,7 +31,7 @@ export default function AuditPage() {
               Back
             </Link>
           </nav>
-          <span className="text-sm font-semibold" aria-hidden="true">AI Spend Audit</span>
+          <span className="text-sm font-semibold" aria-hidden="true">SpendLens</span>
         </div>
       </header>
 

@@ -13,7 +13,7 @@ import { getAuditById } from "@/lib/supabase";
 import { TOOL_CONFIG_MAP } from "@/lib/tools-config";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CREDEX_URL } from "@/lib/constants";
+import { GITHUB_URL } from "@/lib/constants";
 import type { ToolAuditResult, AuditFormState } from "@/types/audit";
 
 // ---------------------------------------------------------------------------
@@ -25,13 +25,13 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const { id } = await props.params;
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://credex-spend-audit.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://credexassignment-six.vercel.app";
 
   const audit = await getAuditById(id);
 
   if (!audit) {
     return {
-      title: "AI Spend Audit — Shared Results",
+      title: "SpendLens — Shared Audit Results",
       description: "See how much this team could save on AI tools.",
     };
   }
@@ -82,7 +82,7 @@ export async function generateMetadata(
 export default async function SharePage(props: PageProps<"/share/[id]">) {
   const { id } = await props.params;
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://credex-spend-audit.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://credexassignment-six.vercel.app";
 
   const audit = await getAuditById(id);
 
@@ -117,7 +117,7 @@ export default async function SharePage(props: PageProps<"/share/[id]">) {
       {/* Header */}
       <header className="border-b border-border">
         <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4 sm:px-6">
-          <span className="text-sm font-semibold">AI Spend Audit</span>
+          <span className="text-sm font-semibold">SpendLens</span>
           <Link
             href="/audit"
             className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
@@ -254,12 +254,12 @@ export default async function SharePage(props: PageProps<"/share/[id]">) {
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <a
-              href={CREDEX_URL}
+              href={GITHUB_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Learn about Credex →
+              View on GitHub →
             </a>
           </div>
         </div>
@@ -270,7 +270,7 @@ export default async function SharePage(props: PageProps<"/share/[id]">) {
             href={`${appUrl}/share/${id}`}
             className="underline underline-offset-4 hover:text-foreground"
           >
-            AI Spend Audit
+            SpendLens
           </a>{" "}
           · Pricing data from official vendor pages
         </p>

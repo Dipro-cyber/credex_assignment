@@ -90,8 +90,7 @@ export default async function ResultsPage(props: PageProps<"/audit/results">) {
                 Back
               </Link>
             </nav>
-            <span className="text-sm font-semibold" aria-hidden="true">Audit Results</span>
-          </div>
+            <span className="text-sm font-semibold" aria-hidden="true">Audit Results</span>          </div>
           <ShareButton audit={audit} />
         </div>
       </header>

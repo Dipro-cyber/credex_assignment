@@ -72,23 +72,12 @@ export default async function Image(props: { params: Promise<{ id: string }> }) 
                 }}
               />
             </div>
-            <span
-              style={{
-                fontSize: "20px",
-                fontWeight: "600",
-                color: "#111",
-              }}
-            >
-              AI Spend Audit
+            <span style={{ fontSize: "20px", fontWeight: "600", color: "#111" }}>
+              SpendLens
             </span>
           </div>
-          <span
-            style={{
-              fontSize: "16px",
-              color: "#6b7280",
-            }}
-          >
-            by Credex
+          <span style={{ fontSize: "16px", color: "#6b7280" }}>
+            spendlens.app
           </span>
         </div>
 
@@ -148,14 +137,8 @@ export default async function Image(props: { params: Promise<{ id: string }> }) 
           <span style={{ fontSize: "18px", color: "#6b7280" }}>
             Free AI spend audit · No login required
           </span>
-          <span
-            style={{
-              fontSize: "18px",
-              fontWeight: "600",
-              color: accentColor,
-            }}
-          >
-            credex.rocks →
+          <span style={{ fontSize: "18px", fontWeight: "600", color: accentColor }}>
+            spendlens.app →
           </span>
         </div>
       </div>

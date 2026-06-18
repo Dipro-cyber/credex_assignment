@@ -34,7 +34,6 @@ function buildSystemPrompt(): string {
 Write a single paragraph of exactly 80–110 words.
 Tone: direct, specific, no fluff. Address the reader as "your team".
 Do not use bullet points, headers, or markdown formatting.
-Do not mention Credex by name — refer to it only as "infrastructure credits" if relevant.
 Focus on the 1–2 biggest savings opportunities and what action to take.
 End with one forward-looking sentence about what the savings could fund instead.`;
 }

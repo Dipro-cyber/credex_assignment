@@ -1,6 +1,6 @@
-# AI Spend Audit — by Credex
+# SpendLens — AI Spend Audit Tool
 
-A free web app that helps startup founders and engineering managers discover where they're overspending on AI tools (Cursor, GitHub Copilot, Claude, ChatGPT, and more), get an instant savings breakdown, and find out if Credex infrastructure credits can cut their bill further. No login required — results in under 10 seconds.
+A free web app that helps startup founders and engineering managers discover where they're overspending on AI tools (Cursor, GitHub Copilot, Claude, ChatGPT, and more) and get an instant savings breakdown. No login required — results in under 10 seconds.
 
 **Who it's for:** Engineering managers and technical founders at seed-to-Series-B startups paying for multiple AI tools who suspect they're not getting the best value.
 

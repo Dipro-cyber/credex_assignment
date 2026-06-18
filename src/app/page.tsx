@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle, TrendingDown, Zap, Shield } from "lucide-react
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { CREDEX_URL } from "@/lib/constants";
+import { GITHUB_URL } from "@/lib/constants";
 
 // ---------------------------------------------------------------------------
 // Static metadata for this page is set in layout.tsx (root metadata).
@@ -35,7 +35,7 @@ function Header() {
       <div className="mx-auto flex h-14 max-w-5xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold tracking-tight">
-            AI Spend Audit
+            SpendLens
           </span>
           <Badge variant="secondary" className="hidden sm:inline-flex">
             Free
@@ -43,12 +43,12 @@ function Header() {
         </div>
         <nav aria-label="Main navigation" className="flex items-center gap-4">
           <a
-            href={CREDEX_URL}
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            by Credex
+            GitHub
           </a>
           <Link
             href="/audit"
@@ -182,7 +182,7 @@ const EXAMPLE_FINDINGS = [
   },
   {
     tool: "Anthropic API",
-    action: "Use Credex credits for 30% off",
+    action: "Bulk credits via volume discount",
     saving: "−$124/mo",
   },
 ];
@@ -406,24 +406,24 @@ function FaqSection() {
 
 const FAQS = [
   {
+    q: "What is SpendLens?",
+    a: "SpendLens is a free AI spend audit tool. Enter your team's AI subscriptions and get an instant breakdown of where you're overspending — with exact savings numbers and actionable recommendations.",
+  },
+  {
     q: "Is this actually free?",
-    a: "Yes. The audit is completely free with no login required. We capture your email after showing you results — never before.",
+    a: "Yes. The audit is completely free with no login required. We show you the results first, then optionally ask for your email to send a copy.",
   },
   {
     q: "How accurate are the savings numbers?",
-    a: "All pricing data is sourced directly from official vendor pricing pages and verified weekly. The audit engine uses hardcoded rules — no AI guesswork in the math.",
-  },
-  {
-    q: "What does Credex do?",
-    a: "Credex is an AI infrastructure credits company. For teams with high AI spend, Credex can negotiate bulk credits that reduce your effective per-token cost. The audit surfaces this as an option when it makes sense.",
+    a: "All pricing data is sourced directly from official vendor pricing pages and verified regularly. The audit engine uses hardcoded rules — no AI guesswork in the math.",
   },
   {
     q: "Will you spam me?",
-    a: "No. You get one confirmation email with your audit results. If your savings are above $500/month, a Credex team member may reach out — but only once, and only if you opt in.",
+    a: "No. You get one confirmation email with your audit results. That's it — no drip campaigns, no newsletters unless you opt in.",
   },
   {
     q: "Can I share my audit results?",
-    a: "Yes. Every audit gets a unique public URL you can share with your team or leadership. The public view strips your email and company name — only tool data and savings numbers are shown.",
+    a: "Yes. Every audit gets a unique public URL you can share with your CTO, CFO, or team. The public view strips your email — only tool data and savings numbers are shown.",
   },
 ];
 
@@ -436,16 +436,7 @@ function Footer() {
     <footer className="border-t border-border py-8">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
-          Built by{" "}
-          <a
-            href={CREDEX_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline underline-offset-4 hover:text-foreground transition-colors"
-          >
-            Credex
-          </a>{" "}
-          — AI infrastructure credits for startups.
+          SpendLens — Free AI spend audit tool.
         </p>
         <p className="text-xs text-muted-foreground">
           Pricing data verified from official vendor pages.

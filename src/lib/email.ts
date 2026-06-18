@@ -1,15 +1,9 @@
 /**
  * Transactional email via Resend.
- *
- * Uses the Resend REST API directly — no SDK dependency.
- * Sends one email per lead capture: audit confirmation with savings summary.
- * For high-savings leads (>$500/mo), the email notes Credex will reach out.
- *
- * Failures are logged but never thrown — email is best-effort.
- * The lead is always stored in Supabase regardless of email success.
+ * Sends one confirmation email per lead capture.
  */
 
-import { HIGH_SAVINGS_THRESHOLD_MONTHLY, CREDEX_URL } from "@/lib/constants";
+import { HIGH_SAVINGS_THRESHOLD_MONTHLY } from "@/lib/constants";
 
 interface SendAuditEmailParams {
   to: string;
@@ -19,56 +13,30 @@ interface SendAuditEmailParams {
   topRecommendations: string[];
 }
 
-/**
- * Send the audit confirmation email.
- * Returns true on success, false on any failure.
- */
 export async function sendAuditEmail(
   params: SendAuditEmailParams
 ): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   const fromEmail = process.env.RESEND_FROM_EMAIL;
   const appUrl =
-    process.env.NEXT_PUBLIC_APP_URL ?? "https://credex-spend-audit.vercel.app";
+    process.env.NEXT_PUBLIC_APP_URL ?? "https://credexassignment-six.vercel.app";
 
   if (!apiKey || !fromEmail) {
     console.warn("[email] Resend not configured — skipping email send");
     return false;
   }
 
-  const {
-    to,
-    auditId,
-    totalMonthlySavings,
-    totalAnnualSavings,
-    topRecommendations,
-  } = params;
-
+  const { to, auditId, totalMonthlySavings, totalAnnualSavings, topRecommendations } = params;
   const isHighSavings = totalMonthlySavings >= HIGH_SAVINGS_THRESHOLD_MONTHLY;
   const shareUrl = `${appUrl}/share/${auditId}`;
 
   const subject =
     totalMonthlySavings > 0
-      ? `Your AI spend audit — $${totalMonthlySavings.toLocaleString()}/mo in savings found`
-      : "Your AI spend audit — you're spending well";
+      ? `Your SpendLens audit — $${totalMonthlySavings.toLocaleString()}/mo in savings found`
+      : "Your SpendLens audit — you're spending well";
 
-  const html = buildEmailHtml({
-    totalMonthlySavings,
-    totalAnnualSavings,
-    topRecommendations,
-    shareUrl,
-    isHighSavings,
-    credexUrl: CREDEX_URL,
-  });
-
-  const text = buildEmailText({
-    totalMonthlySavings,
-    totalAnnualSavings,
-    topRecommendations,
-    shareUrl,
-    isHighSavings,
-    credexUrl: CREDEX_URL,
-  });
+  const html = buildEmailHtml({ totalMonthlySavings, totalAnnualSavings, topRecommendations, shareUrl, isHighSavings });
+  const text = buildEmailText({ totalMonthlySavings, totalAnnualSavings, topRecommendations, shareUrl, isHighSavings });
 
   try {
     const response = await fetch("https://api.resend.com/emails", {
@@ -77,13 +45,7 @@ export async function sendAuditEmail(
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({
-        from: fromEmail,
-        to,
-        subject,
-        html,
-        text,
-      }),
+      body: JSON.stringify({ from: fromEmail, to, subject, html, text }),
     });
 
     if (!response.ok) {
@@ -91,7 +53,6 @@ export async function sendAuditEmail(
       console.error(`[email] Resend error ${response.status}: ${body}`);
       return false;
     }
-
     return true;
   } catch (err) {
     console.error("[email] Resend fetch failed:", err);
@@ -99,17 +60,12 @@ export async function sendAuditEmail(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Email templates
-// ---------------------------------------------------------------------------
-
 interface TemplateParams {
   totalMonthlySavings: number;
   totalAnnualSavings: number;
   topRecommendations: string[];
   shareUrl: string;
   isHighSavings: boolean;
-  credexUrl: string;
 }
 
 function buildEmailHtml(p: TemplateParams): string {
@@ -118,12 +74,8 @@ function buildEmailHtml(p: TemplateParams): string {
       ? `<p style="font-size:32px;font-weight:700;color:#111;margin:8px 0;">
            $${p.totalMonthlySavings.toLocaleString()}<span style="font-size:16px;color:#666;">/mo</span>
          </p>
-         <p style="color:#666;margin:0 0 24px;">
-           $${p.totalAnnualSavings.toLocaleString()} per year
-         </p>`
-      : `<p style="font-size:20px;font-weight:600;color:#059669;margin:8px 0 24px;">
-           ✓ You're spending well
-         </p>`;
+         <p style="color:#666;margin:0 0 24px;">$${p.totalAnnualSavings.toLocaleString()} per year</p>`
+      : `<p style="font-size:20px;font-weight:600;color:#059669;margin:8px 0 24px;">✓ You&apos;re spending well</p>`;
 
   const recsHtml =
     p.topRecommendations.length > 0
@@ -132,14 +84,12 @@ function buildEmailHtml(p: TemplateParams): string {
          </ul>`
       : "";
 
-  const credexBlock = p.isHighSavings
+  const highSavingsBlock = p.isHighSavings
     ? `<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:16px;margin:24px 0;">
-         <p style="font-weight:600;color:#92400e;margin:0 0 8px;">A Credex team member will reach out</p>
-         <p style="color:#92400e;margin:0 0 12px;font-size:14px;">
-           With $${p.totalMonthlySavings.toLocaleString()}/mo in potential savings, Credex infrastructure
-           credits could cut your AI bill significantly. Expect a message within 24 hours.
+         <p style="font-weight:600;color:#92400e;margin:0 0 8px;">High savings found</p>
+         <p style="color:#92400e;margin:0;font-size:14px;">
+           Act on the recommendations in your audit to start saving $${p.totalMonthlySavings.toLocaleString()}/mo.
          </p>
-         <a href="${p.credexUrl}" style="color:#d97706;font-size:14px;">Learn more about Credex →</a>
        </div>`
     : "";
 
@@ -149,22 +99,21 @@ function buildEmailHtml(p: TemplateParams): string {
 <body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f9fafb;margin:0;padding:32px 16px;">
   <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:12px;border:1px solid #e5e7eb;overflow:hidden;">
     <div style="background:#111;padding:24px 32px;">
-      <p style="color:#fff;font-weight:600;font-size:16px;margin:0;">AI Spend Audit</p>
-      <p style="color:#9ca3af;font-size:13px;margin:4px 0 0;">by Credex</p>
+      <p style="color:#fff;font-weight:600;font-size:16px;margin:0;">SpendLens</p>
+      <p style="color:#9ca3af;font-size:13px;margin:4px 0 0;">AI Spend Audit Tool</p>
     </div>
     <div style="padding:32px;">
       <h1 style="font-size:20px;font-weight:700;color:#111;margin:0 0 8px;">Your audit results</h1>
-      <p style="color:#666;margin:0 0 16px;">Here's what we found:</p>
+      <p style="color:#666;margin:0 0 16px;">Here&apos;s what we found:</p>
       ${savingsLine}
       ${recsHtml}
-      ${credexBlock}
-      <a href="${p.shareUrl}"
-         style="display:inline-block;background:#111;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;margin-bottom:24px;">
+      ${highSavingsBlock}
+      <a href="${p.shareUrl}" style="display:inline-block;background:#111;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;font-size:14px;margin-bottom:24px;">
         View full audit →
       </a>
       <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0;">
       <p style="color:#9ca3af;font-size:12px;margin:0;">
-        You received this because you submitted an AI spend audit.
+        You received this because you submitted an audit on SpendLens.
         Pricing data sourced from official vendor pages.
       </p>
     </div>
@@ -184,18 +133,14 @@ function buildEmailText(p: TemplateParams): string {
       ? `\nTop recommendations:\n${p.topRecommendations.map((r) => `• ${r}`).join("\n")}\n`
       : "";
 
-  const credexText = p.isHighSavings
-    ? `\nA Credex team member will reach out within 24 hours about infrastructure credits.\nLearn more: ${p.credexUrl}\n`
-    : "";
-
-  return `AI Spend Audit — Your Results
+  return `SpendLens — Your Audit Results
 ==============================
 
 ${savingsLine}
-${recsText}${credexText}
+${recsText}
 View your full audit: ${p.shareUrl}
 
 ---
-You received this because you submitted an AI spend audit at ${p.shareUrl.split("/share/")[0]}.
+You received this because you submitted an audit on SpendLens.
 Pricing data sourced from official vendor pages.`;
 }

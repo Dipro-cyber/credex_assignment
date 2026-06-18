@@ -29,6 +29,6 @@ jobs:
 
       - name: Run tests
         run: npm run test:run
-        env:          NEXT_PUBLIC_APP_URL: https://credex-spend-audit.vercel.app
+        env:          NEXT_PUBLIC_APP_URL: https://credexassignment-six.vercel.app
           NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
           NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder
